@@ -132,8 +132,8 @@ License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-la
 Group:          System/Emulators/PC
 Version:        %qemuver
 Release:        0
-Source:         https://wiki.qemu.org/download/%{srcname}-%{srcver}.tar.xz
-Source99:       https://wiki.qemu.org/download/%{srcname}-%{srcver}.tar.xz.sig
+#!RemoteAssetUrl: git+https://https://github.com/openSUSE/qemu.git#factory
+Source:         https://github.com/openSUSE/qemu.git
 Source100:      %{srcname}.keyring
 Source1:        80-kvm.rules
 Source2:        kvm.conf
@@ -150,9 +150,8 @@ Source12:       supported.x86.txt
 Source13:       supported.s390.txt
 Source14:       50-seabios-256k.json
 Source15:       60-seabios-128k.json
-# Upstream First -- https://wiki.qemu.org/Contribute/SubmitAPatch
-# This patch queue is auto-generated - see README.PACKAGING for process
-# Patches that will be applied directly across the spec file
+# This archive with the patches is included (for now!) for convenience,
+# but it's not used for packaging. See README.PACKAGING for details.
 Source200:      patches.tar.xz
 Source201:      DSDT.pcie
 Source301:      generate-patches.sh
@@ -1598,21 +1597,9 @@ network adapters available with QEMU.
 %endif
 
 %prep
-%autosetup -a 200 -n %{srcname}-%{srcver}
-
-# Apply all the patches...
-for patch in $(ls patches/ -v1) ; do
-  # ... Ecept the one(s) that we'll apply (conditionally) later in the
-  # spec file. For now, there's only one, so we handle it by just checking
-  # for it. If there will be more, we should find a more generic way to
-  # deal with the pattern (although, it's quite cumbersome to have such
-  # conditionally applied patches and we should really try to avoid doing
-  # that!)
-  if echo $patch | grep -q stub-out-the-SAN-req-s-in-int13.patch ; then
-    continue
-  fi
-  cat patches/$patch | patch -p1 -s --fuzz=0 --no-backup-if-mismatch -f
-done
+rm -rf %{_builddir}/%{name}-%{version}
+mv %{_sourcedir}/%{name} %{_builddir}/%{name}-%{version}
+%setup -T -D
 
 %if "%{name}" == "qemu"
 # Specific preparation steps for building qemu
@@ -2065,16 +2052,16 @@ make -C %srcdir/roms sgabios HOSTCC=cc \
     CC=x86_64-suse-linux-gcc LD=x86_64-suse-linux-ld \
 %endif
 
-# TODO: Can we make this unconditional? Like either apply the patch either
-# always or never?
+# FIXME: We're applying stub-out-the-SAN-req-s-in-int13.patch unconditionally.
+# This does not seem to be a big deal, as force_fir_virtio_pxe_rom is always 1.
+# If we want to really make it conditional, we need to find a way of achieving
+# that (e.g., either not include the patch in the git branch and apply it here
+# or keep the patch there, but also put it in the package and revert it from
+# here).
+#
+# FIXME: Even better, it would be to trace back the requirements for this patch
+# and, if it turns out we don't need it (any longer?), just drop it!
 %if %{force_fit_virtio_pxe_rom}
-pushd %srcdir
-echo "YYY YYY YYY"
-pwd
-ls -l
-cat patches/*-stub-out-the-SAN-req-s-in-int13.patch | patch -p1
-echo "YYY YYY YYY"
-popd
 %make_build -C %srcdir/roms pxerom_variants=virtio pxerom_targets=1af41000 pxerom
 %endif
 
