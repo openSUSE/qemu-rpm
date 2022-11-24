@@ -1597,8 +1597,8 @@ network adapters available with QEMU.
 %endif
 
 %prep
-rm -rf %{_builddir}/%{name}-%{version}
-mv %{_sourcedir}/%{name} %{_builddir}/%{name}-%{version}
+rm -rf %{_builddir}/%{srcname}-%{qemuver}
+mv %{_sourcedir}/%{srcname} %{_builddir}/%{name}-%{qemuver}
 %setup -T -D
 
 %if "%{name}" == "qemu"
