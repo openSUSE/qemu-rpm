@@ -67,7 +67,7 @@ ver=$(echo $branch_name | grep -E "v([0-9]\.){2,}[0-9]{0,}-[[:alnum:]]{1,}" | gr
 pd=$(realpath "${wd}/patches")
 TMPDIR=$(mktemp -d ${TMPDIR}/qemu-${branch_name}-XXXX)
 
-if [[ ! -z $QEMU_PACKAGE_LOCAL_REPO ]] && [[ -d $QEMU_PACKAGE_LOCAL_REPO ]]; then
+if [[ ! -z $QEMU_PACKAGE_LOCAL_REPO ]] ; then
 	qd=$(realpath $QEMU_PACKAGE_LOCAL_REPO)
 else
 	qd=${TMPDIR}/qemu-opensuse
@@ -188,15 +188,15 @@ while read -r subm ; do
 		git checkout -b $submodule_branch opensuse-packaging-repo/${submodule_branch}
 	fi
 
-	git checkout $ubmodule_ranch && git pull && git submodule update --recursive
+	git checkout $submodule_branch && git pull && git submodule update --recursive
 	if [[ ! $? -eq 0 ]]; then
-		echo "ERROR: $qd has a $submodule_branch branch, but it can't be used (it's dirty or something...)"
+		echo "ERROR: ${qd}/${submodule_dir} has a $submodule_branch branch, but it can't be used (it's dirty or something...)"
 		exit 1
 	fi
 	if [[ "$prep_repo_only" == "false" ]]; then
 		git format-patch --no-stat --no-thread -n --start-number $submodule_id -o $pd \
 			-I "Subproject commit  [a-f0-9]{40}" \
-			--src-prefix="a/${submodule_dir}/" --dst-prefix="b/${subd}/" \
+			--src-prefix="a/${submodule_dir}/" --dst-prefix="b/${submodule_dir}/" \
 			--ignore-submodules=all --filename-max-length=128 ${subh}
 	fi
 	popd
