@@ -132,7 +132,7 @@ License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-la
 Group:          System/Emulators/PC
 Version:        %qemuver
 Release:        0
-#!RemoteAssetUrl: git+https://https://github.com/openSUSE/qemu.git#factory
+#!RemoteAssetUrl: git+https://github.com/openSUSE/qemu.git#factory
 Source:         https://github.com/openSUSE/qemu.git
 Source100:      %{srcname}.keyring
 Source1:        80-kvm.rules
