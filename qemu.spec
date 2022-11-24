@@ -182,7 +182,6 @@ BuildRequires:  cross-x86_64-gcc%gcc_version
 BuildRequires:  acpica
 BuildRequires:  binutils-devel
 BuildRequires:  dos2unix
-BuildRequires:  git
 BuildRequires:  glibc-devel-32bit
 BuildRequires:  pkgconfig(liblzma)
 %endif
@@ -280,6 +279,7 @@ BuildRequires:  pkgconfig(zlib)
 # Common build dependencies between qemu and qemu-linux-user
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
+BuildRequires:  git-core
 BuildRequires:  meson
 BuildRequires:  ninja >= 1.7
 BuildRequires:  python3-base >= 3.6
@@ -1595,8 +1595,8 @@ network adapters available with QEMU.
 %endif
 
 %prep
-rm -rf %{_builddir}/%{srcname}-%{qemuver}
-mv %{_sourcedir}/%{srcname} %{_builddir}/%{srcname}-%{qemuver}
+rm -rf %{_builddir}/%{name}-%{qemuver}
+mv %{_sourcedir}/%{srcname} %{_builddir}/%{name}-%{qemuver}
 %setup -T -D
 
 %if "%{name}" == "qemu"
