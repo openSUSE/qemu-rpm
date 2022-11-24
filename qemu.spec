@@ -150,9 +150,6 @@ Source12:       supported.x86.txt
 Source13:       supported.s390.txt
 Source14:       50-seabios-256k.json
 Source15:       60-seabios-128k.json
-# This archive with the patches is included (for now!) for convenience,
-# but it's not used for packaging. See README.PACKAGING for details.
-Source200:      patches.tar.xz
 Source201:      DSDT.pcie
 Source301:      generate-patches.sh
 Source302:      config.sh
