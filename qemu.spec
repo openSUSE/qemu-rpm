@@ -185,6 +185,7 @@ BuildRequires:  cross-x86_64-gcc%gcc_version
 BuildRequires:  acpica
 BuildRequires:  binutils-devel
 BuildRequires:  dos2unix
+BuildRequires:  git
 BuildRequires:  glibc-devel-32bit
 BuildRequires:  pkgconfig(liblzma)
 %endif
@@ -1598,7 +1599,7 @@ network adapters available with QEMU.
 
 %prep
 rm -rf %{_builddir}/%{srcname}-%{qemuver}
-mv %{_sourcedir}/%{srcname} %{_builddir}/%{name}-%{qemuver}
+mv %{_sourcedir}/%{srcname} %{_builddir}/%{srcname}-%{qemuver}
 %setup -T -D
 
 %if "%{name}" == "qemu"
@@ -1997,6 +1998,13 @@ done
 %endif
 
 # Common build steps for qemu and qemu-linux-user
+
+# This is typically done when generating tarballs (see scripts/make-release).
+# Since we're building from a git clone, we need to do it ourselves (and
+# it's the reason why we need git as a BuildRequires:).
+(cd ../roms/seabios && git describe --tags --long --dirty > .version)
+(cd ../roms/skiboot && ./make_version.sh > .version)
+
 %make_build
 
 %if "%{name}" == "qemu"
