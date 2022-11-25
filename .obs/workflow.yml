@@ -1,0 +1,21 @@
+pr_workflow:
+  steps:
+    - branch_package:
+        source_project: home:dfaggioli:experimental:scm_bridge:Virtualization
+        source_package: qemu
+        target_project: home:dfaggioli:experimental:scm_bridge:Virtualization:PRs
+  filters:
+    event: pull_request
+    branches:
+      only:
+        - factory
+push_workflow:
+  steps:
+    trigger_services:
+      project: home:dfaggioli:experimental:scm_bridge:Virtualization
+      package: qemu
+  filters:
+    event: push
+    branches:
+      only:
+        -factory
