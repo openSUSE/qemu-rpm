@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 #
 # Copyright (c) 2022 SUSE LLC
+# Author: Dario Faggioli <dfaggioli@suse.com>
 #
 # This script free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2
