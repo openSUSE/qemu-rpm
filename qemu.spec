@@ -1595,9 +1595,9 @@ network adapters available with QEMU.
 %endif
 
 %prep
-rm -rf %{_builddir}/%{name}-%{qemuver}
-mv %{_sourcedir}/%{srcname} %{_builddir}/%{name}-%{qemuver}
-%setup -T -D
+rm -rf %{_builddir}/%{srcname}-%{qemuver}
+mv %{_sourcedir}/%{srcname} %{_builddir}/%{srcname}-%{qemuver}
+%setup -T -D -n %{srcname}-%{qemuver}
 
 %if "%{name}" == "qemu"
 # Specific preparation steps for building qemu
