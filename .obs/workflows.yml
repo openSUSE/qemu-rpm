@@ -9,13 +9,3 @@ pr_workflow:
     branches:
       only:
         - factory
-push_workflow:
-  steps:
-    trigger_services:
-      project: home:dfaggioli:experimental:scm_bridge:Virtualization
-      package: qemu
-  filters:
-    event: push
-    branches:
-      only:
-        -factory
