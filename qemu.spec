@@ -133,7 +133,6 @@ Group:          System/Emulators/PC
 Version:        %qemuver
 Release:        0
 #!RemoteAssetUrl: git+https://github.com/openSUSE/qemu.git#factory
-Source:         https://github.com/openSUSE/qemu.git
 Source100:      %{srcname}.keyring
 Source1:        80-kvm.rules
 Source2:        kvm.conf
