@@ -3,7 +3,7 @@ pr_workflow:
     - branch_package:
         source_project: home:dfaggioli:experimental:scm_bridge:Virtualization
         source_package: qemu
-        target_project: home:dfaggioli:experimental:scm_bridge:Virtualization:PRs
+        target_project: home:dfaggioli:experimental:scm_bridge:Virtualization:CI
   filters:
     event: pull_request
     branches:
