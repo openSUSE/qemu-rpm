@@ -1594,7 +1594,7 @@ network adapters available with QEMU.
 %endif
 
 %prep
-echo "XXX - Test push"
+echo "XXX - Test push 3"
 rm -rf %{_builddir}/%{srcname}-%{qemuver}
 mv %{_sourcedir}/%{srcname} %{_builddir}/%{srcname}-%{qemuver}
 %setup -T -D -n %{srcname}-%{qemuver}
