@@ -125,6 +125,13 @@ virtualization.
 %define srcver  7.1.0
 %define sbver   1.16.0_0_gd239552
 %define srcname qemu
+
+%define branch v%{qemuver}-suse
+
+%if "%{name}" == "qemu-staging"
+%define branch staging/%{branch}
+%endif
+
 Name:           qemu%{name_suffix}
 URL:            https://www.qemu.org/
 Summary:        %{summary_string}
@@ -132,7 +139,8 @@ License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-la
 Group:          System/Emulators/PC
 Version:        %qemuver
 Release:        0
-#!RemoteAssetUrl: git+https://github.com/openSUSE/qemu.git#factory
+
+#!RemoteAssetUrl: git+https://github.com/openSUSE/qemu.git#%{branch}
 Source100:      %{srcname}.keyring
 Source1:        80-kvm.rules
 Source2:        kvm.conf
