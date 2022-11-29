@@ -101,7 +101,7 @@ git -C $qd remote update
 # it. If not, the best that we can do is try to check if it's there in any of
 # the configured remote. If that's not the case either, we just fail.
 if ! git -C $qd branch | grep -qE "^(\*){0,}[[:space:]]{0,}${branch_name}$" ; then
-	branch_remote=$(git -C $qd branch -r | grep -E "^[[:space:]]{2}.*/${branch_name}$")
+	branch_remote=$(git -C $qd branch -r | grep -E "^[[:space:]]{2}[^/]*/${branch_name}$")
 	if [[ ! $branch_remote ]] ; then
 		echo -n "ERROR: $branch_name cannot be found neither in $qd nor in any remote (including $QEMU_PACKAGE_REMOTE_REPO"
 		[[ $qemu_package_repo ]] && echo -n " or $qemu_package_repo"
