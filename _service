@@ -1,13 +1,7 @@
 <services>
-  <service name="obs_scm" mode="disabled">
-    <param name="scm">git</param>
-    <param name="url">https://gitlab.com/qemu-project/qemu.git</param>
-    <param name="filename">qemu</param>
-    <param name="revision">v7.1.0</param>
-  </service>
-  <service mode="buildtime" name="tar" />
-  <service mode="buildtime" name="recompress">
-    <param name="file">*.tar</param>
-    <param name="compression">xz</param>
-  </service>
+ <service name="download_url">
+   <param name="protocol">https</param>
+   <param name="host">download.qemu.org</param>
+   <param name="path">qemu-7.1.0.tar.xz</param>
+ </service>
 </services>
