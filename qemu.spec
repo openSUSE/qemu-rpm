@@ -132,8 +132,8 @@ License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-la
 Group:          System/Emulators/PC
 Version:        %qemuver
 Release:        0
-Source:         https://wiki.qemu.org/download/%{srcname}-%{srcver}.tar.xz
-Source99:       https://wiki.qemu.org/download/%{srcname}-%{srcver}.tar.xz.sig
+Source:         https://download.qemu.org/%{srcname}-%{srcver}.tar.xz
+Source99:       https://download.qemu.org/%{srcname}-%{srcver}.tar.xz.sig
 Source100:      %{srcname}.keyring
 Source1:        80-kvm.rules
 Source2:        kvm.conf
