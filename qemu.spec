@@ -132,7 +132,9 @@ License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-la
 Group:          System/Emulators/PC
 Version:        %qemuver
 Release:        0
+#!RemoteAsset
 Source:         https://download.qemu.org/%{srcname}-%{srcver}.tar.xz
+#!RemoteAsset
 Source99:       https://download.qemu.org/%{srcname}-%{srcver}.tar.xz.sig
 Source100:      %{srcname}.keyring
 Source1:        80-kvm.rules
