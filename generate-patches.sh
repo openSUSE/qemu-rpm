@@ -59,11 +59,6 @@ cleanup() {
 	[[ "$keep_temp_files" == "false" ]] && rm -rf ${TMPDIR}
 }
 
-# Canonical branch names are "<qemu-version-tag>-<product-name>", e.g.,
-# "v7.1.0-factory" or "v6.2.0-sle15sp4". Let's assume that this is the
-# case and try to derive the base QEMU version from that. Note that, if
-# that's not the case, $ver can be empty!
-ver=$(echo $branch_name | grep -E "v([0-9]\.){2,}[0-9]{0,}-[[:alnum:]]{1,}" | grep -Eo "([0-9]\.){2,}[0-9]{0,}")
 pd=$(realpath "${wd}/patches")
 TMPDIR=$(mktemp -d ${TMPDIR}/qemu-${branch_name}-XXXX)
 
@@ -102,6 +97,17 @@ git -C $qd remote update
 # the configured remote. If that's not the case either, we just fail.
 if ! git -C $qd branch | grep -qE "^(\*){0,}[[:space:]]{0,}${branch_name}$" ; then
 	branch_remote=$(git -C $qd branch -r | grep -E "^[[:space:]]{2}[^/]*/${branch_name}$")
+	# Can it be that it's a tag name that we've been passed?
+	if [[ ! $branch_remote ]] && git -C $qd tag | grep -q ^${branch_name}$ ; then
+		if [[ $(git -C $qd branch -r --contains $(git -C $qd rev-parse $branch_name) | wc -l) -gt 1 ]]; then
+			echo "ERROR: $branch_name is a tag that can refer the following branches. Please, pick one (with the -b option):"
+			git -C $qd branch -r --contains $(git -C $qd rev-parse $branch_name)
+			exit 1
+		fi
+		bb=$(git -C $qd branch -r --contains $(git -C $qd rev-parse ${branch_name}))
+		branch_name=$(git -C $qd log $bb --oneline --decorate | grep -q "tag: ${branch_name}" | sed 's/^[^/]*\///')
+		branch_remote=$bb
+	fi
 	if [[ ! $branch_remote ]] ; then
 		echo -n "ERROR: $branch_name cannot be found neither in $qd nor in any remote (including $QEMU_PACKAGE_REMOTE_REPO"
 		[[ $qemu_package_repo ]] && echo -n " or $qemu_package_repo"
@@ -119,6 +125,12 @@ if [[ ! $? -eq 0 ]]; then
 	exit 1
 fi
 
+# Canonical branch names are "<qemu-version-tag>-<product-name>", e.g.,
+# "v7.1.0-factory" or "v6.2.0-sle15sp4". Let's assume that this is the
+# case and try to derive the base QEMU version from that. Note that, if
+# that's not the case, $ver can be empty!
+ver=$(echo $branch_name | grep -E "v([0-9]\.){2,}[0-9]{0,}-[[:alnum:]]{1,}" | grep -Eo "([0-9]\.){2,}[0-9]{0,}")
+
 # Let's check if all the tags and branches are there. In fact, $branch_name
 # should be the current checked out branch, at this point:
 if ! git -C $qd branch | grep -q "^* $branch_name$" ; then
@@ -128,7 +140,7 @@ fi
 # About the base QEMU version, either we know that already, from $branch_name
 # itself, or we must try to figure that out:
 if [[ ! $ver ]] ; then
-	ver=$(git -C $qd describe --tags | grep -Eo "([0-9]\.){2,}[0-9]{0,}")
+	ver=$(git -C $qd describe --tags 2> /dev/null | grep -Eo "([0-9]\.){2,}[0-9]{0,}")
 fi
 if ! git -C $qd tag | grep -q "^v${ver}$" ; then
 	echo "ERROR: cannot find tag 'v${ver}' in any remote of $qd"
