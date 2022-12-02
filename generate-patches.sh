@@ -246,11 +246,11 @@ if [[ "$prep_repo_only" == "false" ]]; then
 		mv $pd "${pd}_old" ; mv ${wd}/patches.tar.xz ${wd}/patches_old.tar.xz
 		popd
 	fi
-	rm -rf $pd ${wd}/patches.tar.xz ; mkdir -p $pd
+	rm -rf $pd ; mkdir -p $pd
 	git format-patch --no-stat --no-thread -n --start-number 1 -o $pd \
 		-I "Subproject commit  [a-f0-9]{40}" \
 		--ignore-submodules=all --filename-max-length=128 v${ver}
-	git log --oneline HEAD...v{$ver} >> ${pd}/commits.list
+	git log --oneline HEAD...v${ver} > ${pd}/commits.list
 fi
 
 # We want to know which submodules have patches applied (in $branch_name, of
@@ -319,7 +319,21 @@ done < ${TMPDIR}/qemu-submodules-patched
 if [[ "$prep_repo_only" == "false" ]] ; then
 	pushd $wd
 	ls ${pd}/ | grep '.patch$' > ${pd}/patches.list
-	tar cJf patches.tar.xz patches
+	if diff patches patches_old ; then
+		# Patches in the existing patches.tar.xz archive are 100%
+		# equal to the newly generated ones, so just use them.
+		rm -rf patches
+		mv patches_old patches
+		mv patches_old.tar.xz patches.tar.xz
+	else
+		# Some change happened to the patches. We need to update the
+		# changes file, and of course we want to keep the new set.
+
+		# TODO: Generate the changes file
+
+		rm -rf patches_old patches_old.tar.xz
+		tar cJf patches.tar.xz patches
+	fi
 	popd
 fi
 
