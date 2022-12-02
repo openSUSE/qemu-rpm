@@ -1603,7 +1603,7 @@ network adapters available with QEMU.
 %autosetup -a 200 -n %{srcname}-%{srcver}
 
 # Apply all the patches...
-for patch in $(ls patches/ -v1) ; do
+for patch in $(ls patches/*.patch -v1) ; do
   # ... Ecept the one(s) that we'll apply (conditionally) later in the
   # spec file. For now, there's only one, so we handle it by just checking
   # for it. If there will be more, we should find a more generic way to
